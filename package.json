@@ -1,0 +1,11 @@
+{
+  "name": "roll-call-bot",
+  "version": "1.0.0",
+  "description": "daily roll call telegram bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Anton Bubel",
+  "license": "ISC"
+}
