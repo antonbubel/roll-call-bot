@@ -5,7 +5,7 @@ class Schedule {
   _rollCallJob;
 
   constructor() {
-    this._initializeJobs();
+    // this._initializeJobs();
   }
 
   async launch() {

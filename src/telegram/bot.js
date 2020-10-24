@@ -4,6 +4,8 @@ const { stage, setupWizardId } = require('./scenes');
 const { rollCallHour, rollCallMinute } = require('./constants/roll-call');
 const { User, Reply } = require('../database/models');
 
+const { initializeCommandHandlers } = require('./commands');
+
 class Bot {
   static _botInstance;
 
@@ -37,14 +39,19 @@ class Bot {
     return `${pings} have not replied in time :(`;
   }
 
-  _initializeBot(botToken) {
+  async _initializeBot(botToken) {
     if (!this._botInstance) {
       this._botInstance = new Telegraf(botToken);
       this._botInstance.use(session());
       this._botInstance.use(stage.middleware());
-      this._botInstance.start(this._handleStartCommand.bind(this));
-      this._botInstance.command('edittime', this._handleEditTimeCommand.bind(this));
-      this._botInstance.command('here', this._handleHereCommand.bind(this));
+
+      initializeCommandHandlers(this._botInstance);
+
+      // this._botInstance.start(this._handleStartCommand.bind(this));
+
+      // this._botInstance.on('message', this._handleMessage.bind(this));
+      // this._botInstance.command('edittime', this._handleEditTimeCommand.bind(this));
+      // this._botInstance.command('here', this._handleHereCommand.bind(this));
     }
   }
 

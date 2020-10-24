@@ -1,10 +1,22 @@
-const { User, Reply } = require('./models');
+const { User, Reply, Chat, ChatMember } = require('./models');
 
 const initializeDatabase = async () => {
-  Reply.belongsTo(User);
+  User.hasMany(ChatMember, { as: 'chatMembers', foreignKey: 'userId' });
+  ChatMember.belongsTo(User, { foreignKey: 'userId' });
 
-  await User.sync({ force: false });
-  await Reply.sync({ force: false });
+  Chat.hasMany(ChatMember, { as: 'chatMembers', foreignKey: 'chatId' })
+  ChatMember.belongsTo(Chat, { foreignKey: 'chatId' });
+
+  User.hasMany(Reply, { as: 'replies', foreignKey: 'userId' });
+  Reply.belongsTo(User, { foreignKey: 'userId' });
+
+  Chat.hasMany(Reply, { as: 'replies', foreignKey: 'chatId' });
+  Reply.belongsTo(Chat, { foreignKey: 'chatId' });
+
+  await Chat.sync({ force: true });
+  await User.sync({ force: true });
+  await ChatMember.sync({ force: true });
+  await Reply.sync({ force: true });
 }
 
 module.exports = { initializeDatabase };

@@ -7,20 +7,14 @@ const User = connection.sequelize.define('User', {
     primaryKey: true,
     allowNull: false
   },
+  username: {
+    type: DataTypes.STRING
+  },
   firstName: {
     type: DataTypes.STRING
   },
   lastName: {
     type: DataTypes.STRING
-  },
-  username: {
-    type: DataTypes.STRING
-  },
-  reminderHour: {
-    type: DataTypes.INTEGER
-  },
-  reminderMinute: {
-    type: DataTypes.INTEGER
   }
 }, {
 });
