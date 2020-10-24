@@ -1,6 +1,7 @@
+const { Mutex } = require('async-mutex');
+
 const { UserRepository, ChatRepository, ChatMemberRepository } = require('../../../database/repositories');
 const { mapUser, mapUsers, mapChat } = require('../../mappings');
-const { Mutex } = require('async-mutex');
 
 class MessageCommand {
   constructor(botInstance) {
