@@ -10,6 +10,17 @@ class ChatMemberRepository {
     });
   }
 
+  async getChatMembersExcept(chatId, userIds) {
+    return await ChatMember.findAll({
+      where: {
+        [Op.and]: [
+          { chatId: chatId },
+          { userId: { [Op.notIn]: userIds } }
+        ]
+      }
+    })
+  }
+
   async createChatMember(chatId, userId, isChatAdministrator) {
     return await ChatMember.create({
       userId,

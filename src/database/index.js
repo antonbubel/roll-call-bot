@@ -13,10 +13,10 @@ const initializeDatabase = async () => {
   Chat.hasMany(Reply, { as: 'replies', foreignKey: 'chatId' });
   Reply.belongsTo(Chat, { foreignKey: 'chatId' });
 
-  await Chat.sync({ force: true });
-  await User.sync({ force: true });
-  await ChatMember.sync({ force: true });
-  await Reply.sync({ force: true });
+  await Chat.sync({ force: false });
+  await User.sync({ force: false });
+  await ChatMember.sync({ force: false });
+  await Reply.sync({ force: false });
 }
 
 module.exports = { initializeDatabase };

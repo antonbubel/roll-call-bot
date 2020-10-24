@@ -1,4 +1,5 @@
-const { User } = require('../models');
+const { User, ChatMember } = require('../models');
+const { Op } = require('sequelize');
 
 class UserRepository {
   async getUserById(userId) {
@@ -7,6 +8,22 @@ class UserRepository {
         userId: userId
       }
     })
+  }
+
+  async getChatUsersExcept(chatId, userIds) {
+    return await User.findAll({
+      where: {
+        [Op.and]: [
+          { userId: { [Op.notIn]: userIds } },
+          { '$chatMembers.chatId$': chatId }
+        ]
+      },
+      include: [{
+        as: 'chatMembers',
+        model: ChatMember,
+        required: false
+      }]
+    });
   }
 
   async createUser({ userId, username, firstName, lastName }) {

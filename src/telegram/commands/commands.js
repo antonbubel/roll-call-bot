@@ -1,5 +1,10 @@
 const { HelpCommand } = require('./help/help-command');
 const { MessageCommand } = require('./message/message-command');
+const { ReplyCommand } = require('./reply/reply-command');
+
+const {
+  replyCommandName
+} = require('./custom-commands');
 
 module.exports = [
   {
@@ -14,5 +19,10 @@ module.exports = [
     method: 'on',
     updateType: 'message',
     handler: MessageCommand
+  },
+  {
+    method: 'action',
+    updateType: replyCommandName,
+    handler: ReplyCommand
   }
 ];

@@ -27,11 +27,9 @@ const Chat = connection.sequelize.define('Chat', {
   rollCallEndMinute: {
     type: DataTypes.INTEGER
   },
-  rollCallDaysOfWeek: {
-    type: DataTypes.STRING
-  },
   isActive: {
     type: DataTypes.BOOLEAN,
+    defaultValue: false,
     allowNull: false
   }
 }, {

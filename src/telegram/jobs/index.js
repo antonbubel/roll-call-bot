@@ -1,4 +1,4 @@
-const { createReminderJob } = require('./reminder-job');
-const { createRollCallJob } = require('./roll-call-job');
+const { createStartRollCallJob } = require('./start-roll-call-job');
+const { createEndRollCallJob } = require('./end-roll-call-job');
 
-module.exports = { createReminderJob, createRollCallJob };
+module.exports = { createStartRollCallJob, createEndRollCallJob };

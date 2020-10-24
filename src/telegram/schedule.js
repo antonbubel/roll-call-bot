@@ -1,23 +1,20 @@
-const { createReminderJob, createRollCallJob } = require('./jobs');
+const { createStartRollCallJob, createEndRollCallJob } = require('./jobs');
 
 class Schedule {
-  _reminderJob;
-  _rollCallJob;
-
   constructor() {
-    // this._initializeJobs();
+    this._initializeJobs();
   }
 
   async launch() {
   }
 
   _initializeJobs() {
-    if (!this._reminderJob) {
-      this._reminderJob = createReminderJob();
+    if (!this._startRollCallJob) {
+      this._startRollCallJob = createStartRollCallJob();
     }
 
-    if (!this._rollCallJob) {
-      this._rollCallJob = createRollCallJob();
+    if (!this._endRollCallJob) {
+      this._endRollCallJob = createEndRollCallJob();
     }
   }
 }

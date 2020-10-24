@@ -2,11 +2,6 @@ const { DataTypes } = require('sequelize');
 const connection = require('../connection');
 
 const Reply = connection.sequelize.define('Reply', {
-  replyId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    allowNull: false
-  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false
