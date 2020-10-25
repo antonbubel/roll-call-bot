@@ -32,7 +32,23 @@ class GroupStartRollCallCommand {
     }
 
     const chat = await ChatRepository.getChatById(chatId);
-    const chatMembers = await ChatMemberRepository.getChatMembers(chatId);
+
+    if (chat.isActive) {
+      await this._replyChatIsAlreadyActive(ctx, chat);
+      return;
+    }
+
+    await this._tryToSetChatActiveAndHandleReply(ctx, chat);
+  }
+
+  async _replyChatIsAlreadyActive(ctx, chat) {
+    const message = `The roll call is already enabled for ${chat.chatName}.`;
+    
+    await ctx.reply(message);
+  }
+
+  async _tryToSetChatActiveAndHandleReply(ctx, chat) {
+    const chatMembers = await ChatMemberRepository.getChatMembers(chat.chatId);
     const success = await this._validateChatSettingsAndSetActive(chat, chatMembers);
 
     await this._handleSetChatActiveResult(ctx, chat, chatMembers, success);
