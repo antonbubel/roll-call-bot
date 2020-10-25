@@ -5,10 +5,9 @@ const { Keyboard, Key } = require('telegram-keyboard');
 const { ChatRepository, ChatMemberRepository } = require('../../../database/repositories');
 
 const trim = require('../../../utilities/trim');
-const isNull = require('../../../utilities/is-null');
 const formatTime = require('../../../utilities/format-time');
 
-const { buildChatChosenAction } = require('./utilities');
+const { buildChatChosenAction, chatHasRollCallStartTime, chatHasRollCallEndTime, getChatInactivityReason } = require('./utilities');
 
 const {
   setRollCallStartTimeCommandName,
@@ -66,47 +65,18 @@ class GroupInfoCommand {
 
     const rollCallInactivityReason = chat.isActive
       ? ''
-      : this._getChatInactivityReason(chat, chatMembers);
+      : getChatInactivityReason(chat, chatMembers);
 
     return trim(`
       *Group chat name*: ${chat.chatName}
       *Group chat number of members*: ${chat.chatMembersCount}
 
-      *Roll call start time*: ${this._hasRollCallStartTime(chat) ? this._getRollCallStartTime(chat) : '_Unavailable_'}
-      *Roll call end time*: ${this._hasRollCallEndTime(chat) ? this._getRollCallEndTime(chat) : '_Unavailable_'}
+      *Roll call start time*: ${chatHasRollCallStartTime(chat) ? this._getRollCallStartTime(chat) : '_Unavailable_'}
+      *Roll call end time*: ${chatHasRollCallEndTime(chat) ? this._getRollCallEndTime(chat) : '_Unavailable_'}
 
       *Roll call status*: ${rollCallStatus}
 
       ${rollCallInactivityReason}
-    `);
-  }
-
-  _getChatInactivityReason(chat, chatMembers) {
-    const errors = [];
-
-    if (!this._hasRollCallStartTime(chat)) {
-      errors.push('The roll call start time is mandatory.');
-    }
-
-    if (!this._hasRollCallEndTime(chat)) {
-      errors.push('The roll call end time is mandatory.');
-    }
-
-    if (chat.chatMembersCount - 1 > chatMembers.length) {
-      errors.push('Bot is still learning about the group chat members.');
-    }
-
-    if (errors.length === 0) {
-      return 'Inactivity reason: the roll call is turned off.';
-    }
-
-    if (errors.length === 1) {
-      return `Inactivity reason: ${errors[0]}`;
-    }
-
-    return trim(`
-      Inactivity reasons:
-      ${errors.map(error => `+ ${error}`)}
     `);
   }
 
@@ -116,16 +86,6 @@ class GroupInfoCommand {
 
   _getRollCallEndTime(chat) {
     return formatTime(chat.rollCallEndHour, chat.rollCallEndMinute);
-  }
-
-  _hasRollCallStartTime(chat) {
-    return !isNull(chat.rollCallStartHour)
-      && !isNull(chat.rollCallStartMinute);
-  }
-
-  _hasRollCallEndTime(chat) {
-    return !isNull(chat.rollCallEndHour)
-      && !isNull(chat.rollCallEndMinute);
   }
 }
 

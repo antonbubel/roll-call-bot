@@ -1,4 +1,6 @@
 const { GroupInfoCommand } = require('./group-info-command');
+const { GroupStartRollCallCommand } = require('./group-start-roll-call-command');
+const { GroupStopRollCallCommand } = require('./group-stop-roll-call-command');
 
 const {
   groupInfoCommandName,
@@ -16,7 +18,11 @@ class GroupChosenCommand {
 
   _initializeHandlers(botInstance) {
     this._handlers = {
-      [groupInfoCommandName]: new GroupInfoCommand(botInstance)
+      [groupInfoCommandName]: new GroupInfoCommand(botInstance),
+      [setRollCallStartTimeCommandName]: null,
+      [setRollCallEndTimeCommandName]: null,
+      [startRollCallCommandName]: new GroupStartRollCallCommand(botInstance),
+      [stopRollCallCommandName]: new GroupStopRollCallCommand(botInstance)
     };
   }
 
