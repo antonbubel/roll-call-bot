@@ -71,11 +71,10 @@ class GroupInfoCommand {
       *Group chat name*: ${chat.chatName}
       *Group chat number of members*: ${chat.chatMembersCount}
 
-      *Roll call start time*: ${chatHasRollCallStartTime(chat) ? this._getRollCallStartTime(chat) : '_Unavailable_'}
-      *Roll call end time*: ${chatHasRollCallEndTime(chat) ? this._getRollCallEndTime(chat) : '_Unavailable_'}
+      *Roll call start time*: ${chatHasRollCallStartTime(chat) ? this._getRollCallStartTime(chat) : '_Undefined_'}
+      *Roll call end time*: ${chatHasRollCallEndTime(chat) ? this._getRollCallEndTime(chat) : '_Undefined_'}
 
       *Roll call status*: ${rollCallStatus}
-
       ${rollCallInactivityReason}
     `);
   }

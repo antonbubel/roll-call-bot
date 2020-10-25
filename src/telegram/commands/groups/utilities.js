@@ -44,7 +44,7 @@ const getChatInactivityReason = (chat, chatMembers) => {
 
   return trim(`
     Inactivity reasons:
-    ${errors.map(error => `+ ${error}`)}
+    ${errors.map(error => `- ${error}`).join('\n')}
   `);
 }
 

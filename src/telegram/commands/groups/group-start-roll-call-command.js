@@ -74,7 +74,7 @@ class GroupStartRollCallCommand {
   }
 
   async _replySetChatActiveSuccess(ctx, chat) {
-    const successMessage = `Success! The roll call was enabled for the ${chat.chatName}.`;
+    const successMessage = `The roll call was enabled for the ${chat.chatName}.`;
 
     await ctx.reply(successMessage);
   }
