@@ -4,8 +4,8 @@ const { stage } = require('./scenes');
 
 const { initializeCommandHandlers } = require('./commands');
 
-const { StartRollCallCommand } = require('./commands/start-roll-call/start-roll-call-command');
-const { EndRollCallCommand } = require('./commands/end-roll-call/end-roll-call-command');
+const { StartRollCallCommand } = require('./commands/roll-call/start-roll-call-command');
+const { EndRollCallCommand } = require('./commands/roll-call/end-roll-call-command');
 
 class Bot {
   constructor() {

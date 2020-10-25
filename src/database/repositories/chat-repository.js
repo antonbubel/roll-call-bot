@@ -1,4 +1,4 @@
-const { Chat } = require('../models');
+const { Chat, ChatMember } = require('../models');
 const { Op } = require('sequelize');
 
 class ChatRepository {
@@ -34,6 +34,22 @@ class ChatRepository {
     });
   }
 
+  async getChatsWhereUserIsAdministrator(userId) {
+    return await Chat.findAll({
+      where: {
+        [Op.and]: [
+          { '$chatMembers.userId$': userId },
+          { '$chatMembers.isChatAdministrator$': true }
+        ]
+      },
+      include: [{
+        as: 'chatMembers',
+        model: ChatMember,
+        required: false
+      }]
+    });
+  }
+
   async createChat({ chatId, chatName, chatMembersCount }) {
     return await Chat.create({
       chatId,
@@ -45,6 +61,14 @@ class ChatRepository {
   async updateChat(chat, { chatName, chatMembersCount }) {
     chat.chatName = chatName;
     chat.chatMembersCount = chatMembersCount;
+
+    await chat.save();
+
+    return chat;
+  }
+
+  async setChatActive(chat, isActive) {
+    chat.isActive = isActive;
 
     await chat.save();
 

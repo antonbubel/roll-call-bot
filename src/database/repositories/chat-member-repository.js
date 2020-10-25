@@ -9,6 +9,17 @@ class ChatMemberRepository {
       }
     });
   }
+  
+  async getChatMember(chatId, userId) {
+    return await ChatMember.findOne({
+      where: {
+        [Op.and]: [
+          { chatId: chatId },
+          { userId: userId }
+        ]
+      }
+    });
+  }
 
   async getChatMembersExcept(chatId, userIds) {
     return await ChatMember.findAll({

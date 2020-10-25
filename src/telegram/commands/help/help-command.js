@@ -4,7 +4,6 @@ const {
   editGroupsCommandName,
   setRollCallStartTimeCommandName,
   setRollCallEndTimeCommandName,
-  setRollCallDaysCommandName,
   startRollCallCommandName,
   stopRollCallCommandName
 } = require('../custom-commands');
@@ -20,7 +19,7 @@ class HelpCommand {
 
     if (userId === chatId) {
       const helpMessage = this._getHelpMessage();
-      ctx.reply(helpMessage, { parse_mode: 'Markdown' });
+      await ctx.reply(helpMessage, { parse_mode: 'Markdown' });
     }
   }
 
@@ -35,7 +34,6 @@ class HelpCommand {
       *Roll call settings:*
       /${setRollCallStartTimeCommandName} - set the start time of your roll call
       /${setRollCallEndTimeCommandName} - set the end time of your roll call
-      /${setRollCallDaysCommandName} - set roll call days of the week
 
       *Start/Stop roll calls:*
       /${startRollCallCommandName} - start roll call

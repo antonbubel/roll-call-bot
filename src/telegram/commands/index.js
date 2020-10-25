@@ -9,7 +9,9 @@ const bindHandler = (botInstance, command, handlerInstance) => {
 };
 
 const initialzeCommandHandler = (botInstance, command) => {
-  const handlerInstance = new command.handler(botInstance);
+  const handlerInstance = command.extra && command.extra.length
+    ? new command.handler(botInstance, ...command.extra)
+    : new command.handler(botInstance);
 
   if (!handlerInstance.handle || typeof handlerInstance.handle !== 'function') {
     throw new Error(`Error while trying to initialize the command handler: commandHandler.handle is not a function.`);
