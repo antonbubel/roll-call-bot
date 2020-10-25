@@ -1,11 +1,17 @@
 const { GroupInfoCommand } = require('./group-info-command');
 const { GroupStartRollCallCommand } = require('./group-start-roll-call-command');
 const { GroupStopRollCallCommand } = require('./group-stop-roll-call-command');
+const { GroupSetStartTimeCommand } = require('./group-set-start-time-command');
+const { GroupSetStartHourCommand } = require('./group-set-start-hour-command');
 
 const {
   groupInfoCommandName,
   setRollCallStartTimeCommandName,
+  setRollCallStartHourCommandName,
+  setRollCallStartMinuteCommandName,
   setRollCallEndTimeCommandName,
+  setRollCallEndHourCommandName,
+  setRollCallEndMinuteCommandName,
   startRollCallCommandName,
   stopRollCallCommandName
 } = require('../custom-commands');
@@ -19,22 +25,26 @@ class GroupChosenCommand {
   _initializeHandlers(botInstance) {
     this._handlers = {
       [groupInfoCommandName]: new GroupInfoCommand(botInstance),
-      [setRollCallStartTimeCommandName]: null,
+      [setRollCallStartTimeCommandName]: new GroupSetStartTimeCommand(botInstance),
+      [setRollCallStartHourCommandName]: new GroupSetStartHourCommand(botInstance),
+      [setRollCallStartMinuteCommandName]: null,
       [setRollCallEndTimeCommandName]: null,
+      [setRollCallEndHourCommandName]: null,
+      [setRollCallEndMinuteCommandName]: null,
       [startRollCallCommandName]: new GroupStartRollCallCommand(botInstance),
       [stopRollCallCommandName]: new GroupStopRollCallCommand(botInstance)
     };
   }
 
   async handle(ctx) {
-    const [, chatId, command] = ctx.match;
+    const [, chatId, command, extraParam] = ctx.match;
 
     if (!this._handlers[command]) {
       await ctx.reply('Command not found.');
       return;
     }
     
-    await this._handlers[command].handle(ctx, chatId);
+    await this._handlers[command].handle(ctx, chatId, extraParam);
   }
 }
 

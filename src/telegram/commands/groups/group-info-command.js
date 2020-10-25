@@ -5,9 +5,8 @@ const { Keyboard, Key } = require('telegram-keyboard');
 const { ChatRepository, ChatMemberRepository } = require('../../../database/repositories');
 
 const trim = require('../../../utilities/trim');
-const formatTime = require('../../../utilities/format-time');
 
-const { buildChatChosenAction, chatHasRollCallStartTime, chatHasRollCallEndTime, getChatInactivityReason } = require('./utilities');
+const { buildChatChosenAction, getRollCallScheduleInfo, getChatInactivityReason } = require('./utilities');
 
 const {
   setRollCallStartTimeCommandName,
@@ -70,21 +69,10 @@ class GroupInfoCommand {
     return trim(`
       *Group chat name*: ${chat.chatName}
       *Group chat number of members*: ${chat.chatMembersCount}
-
-      *Roll call start time*: ${chatHasRollCallStartTime(chat) ? this._getRollCallStartTime(chat) : '_Undefined_'}
-      *Roll call end time*: ${chatHasRollCallEndTime(chat) ? this._getRollCallEndTime(chat) : '_Undefined_'}
-
+      ${getRollCallScheduleInfo(chat)}
       *Roll call status*: ${rollCallStatus}
       ${rollCallInactivityReason}
     `);
-  }
-
-  _getRollCallStartTime(chat) {
-    return formatTime(chat.rollCallStartHour, chat.rollCallStartMinute);
-  }
-
-  _getRollCallEndTime(chat) {
-    return formatTime(chat.rollCallEndHour, chat.rollCallEndMinute);
   }
 }
 

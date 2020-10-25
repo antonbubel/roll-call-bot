@@ -2,9 +2,10 @@ const { groupChatActionPrefix } = require('./constants');
 
 const isNull = require('../../../utilities/is-null');
 const trim = require('../../../utilities/trim');
+const formatTime = require('../../../utilities/format-time');
 
-const buildChatChosenAction = (chatId, command) =>
-  `${groupChatActionPrefix}-${chatId}-${command}`;
+const buildChatChosenAction = (chatId, command, param) =>
+  `${groupChatActionPrefix}-${chatId}-${command}${param ? `-${param}` : ''}`;
 
 const chatSettingsAreValid = (chat, chatMembers) => chatHasRollCallStartTime(chat)
   && chatHasRollCallEndTime(chat)
@@ -18,6 +19,17 @@ const chatHasRollCallEndTime = (chat) => !isNull(chat.rollCallEndHour)
 
 const allChatMembersAvailabe = (chat, chatMembers) =>
   chat.chatMembersCount - 1 === chatMembers.length;
+
+const getRollCallStartTime = (chat) =>
+  formatTime(chat.rollCallStartHour, chat.rollCallStartMinute); 
+
+const getRollCallEndTime = (chat) =>
+  formatTime(chat.rollCallEndHour, chat.rollCallEndMinute);
+
+const getRollCallScheduleInfo = (chat) => trim(`
+  *Roll call start time*: ${chatHasRollCallStartTime(chat) ? getRollCallStartTime(chat) : '_Undefined_'}
+  *Roll call end time*: ${chatHasRollCallEndTime(chat) ? getRollCallEndTime(chat) : '_Undefined_'}
+`);
 
 const getChatInactivityReason = (chat, chatMembers) => {
   const errors = [];
@@ -54,5 +66,8 @@ module.exports = {
   chatHasRollCallStartTime,
   chatHasRollCallEndTime,
   allChatMembersAvailabe,
+  getRollCallStartTime,
+  getRollCallEndTime,
+  getRollCallScheduleInfo,
   getChatInactivityReason
 };
