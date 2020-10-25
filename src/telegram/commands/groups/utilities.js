@@ -1,4 +1,4 @@
-const { groupChatActionPrefix } = require('./constants');
+const { groupChatActionPrefix, rollCallMinMinute, rollCallMaxMinute } = require('./constants');
 
 const isNull = require('../../../utilities/is-null');
 const trim = require('../../../utilities/trim');
@@ -25,6 +25,12 @@ const getRollCallStartTime = (chat) =>
 
 const getRollCallEndTime = (chat) =>
   formatTime(chat.rollCallEndHour, chat.rollCallEndMinute);
+
+const validateMinute = (minute) => minute >= rollCallMinMinute
+  && minute < rollCallMaxMinute;
+
+const validateStartTimeOverEndTime = (endHour, endMinute, startHour, startMinute) => endHour > startHour
+  || (endHour === startHour && endMinute > startMinute);
 
 const getRollCallScheduleInfo = (chat) => trim(`
   *Roll call start time*: ${chatHasRollCallStartTime(chat) ? getRollCallStartTime(chat) : '_Undefined_'}
@@ -69,5 +75,7 @@ module.exports = {
   getRollCallStartTime,
   getRollCallEndTime,
   getRollCallScheduleInfo,
-  getChatInactivityReason
+  getChatInactivityReason,
+  validateMinute,
+  validateStartTimeOverEndTime
 };

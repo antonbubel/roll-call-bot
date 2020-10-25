@@ -48,7 +48,7 @@ class GroupSetStartHourCommand {
       *Reason*: the roll call start hour cannot be greater than the roll call end hour (${getDisplayHour(hour)} > ${getDisplayHour(chat.rollCallEndHour)})
     `);
 
-    await ctx.reply(message);
+    await ctx.reply(message, { parse_mode: 'Markdown' });
   }
 
   async _replyWithSuccessMessage(ctx, chat, hour) {

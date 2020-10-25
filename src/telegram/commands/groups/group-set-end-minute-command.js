@@ -3,9 +3,9 @@ const { ChatRepository, ChatMemberRepository } = require('../../../database/repo
 const trim = require('../../../utilities/trim');
 const formatTime = require('../../../utilities/format-time');
 
-const { chatHasRollCallEndTime, validateMinute, validateStartTimeOverEndTime } = require('./utilities');
+const { chatHasRollCallStartTime, validateMinute, validateStartTimeOverEndTime } = require('./utilities');
 
-class GroupSetStartMinuteCommand {
+class GroupSetEndMinuteCommand {
   constructor(botInstance) {
     this._botInstance = botInstance;
   }
@@ -22,26 +22,26 @@ class GroupSetStartMinuteCommand {
       return;
     }
 
-    await this._trySettingStartMinute(ctx, chatId, minute);
+    await this._trySettingEndMinute(ctx, chatId, minute);
   }
 
-  async _trySettingStartMinute(ctx, chatId, minute) {
+  async _trySettingEndMinute(ctx, chatId, minute) {
     const chat = await ChatRepository.getChatById(chatId);
 
-    if (chatHasRollCallEndTime(chat) && !validateStartTimeOverEndTime(chat.rollCallEndHour, chat.rollCallEndMinute, chat.rollCallStartHour, minute)) {
+    if (chatHasRollCallStartTime(chat) && !validateStartTimeOverEndTime(chat.rollCallEndHour, minute, chat.rollCallStartHour, chat.rollCallStartMinute)) {
       await this._replyStartTimeIsGreaterThanEndTimeError(ctx, chat, chat.rollCallStartHour, minute)
       return;
     }
 
-    await ChatRepository.setChatRollCallStartMinute(chat, minute);
-    await this._replyWithSuccessMessage(ctx, chat, chat.rollCallStartHour, minute);
+    await ChatRepository.setChatRollCallEndMinute(chat, minute);
+    await this._replyWithSuccessMessage(ctx, chat, chat.rollCallEndHour, minute);
   }
 
   async _replyStartTimeIsGreaterThanEndTimeError(ctx, chat, hour, minute) {
-    const rollCallEndTime = formatTime(chat.rollCallEndHour, chat.rollCallEndMinute);
-    const rollCallStartTime = formatTime(hour, minute);
+    const rollCallEndTime = formatTime(hour, minute);
+    const rollCallStartTime = formatTime(chat.rollCallStartHour, chat.rollCallStartMinute);
     const message = trim(`
-      Failed to set the roll call start minute to ${chat.chatName}.
+      Failed to set the roll call end minute to ${chat.chatName}.
       *Reason*: the roll call start time cannot be greater than the roll call end time (${rollCallEndTime} >= ${rollCallStartTime})
     `);
 
@@ -49,9 +49,9 @@ class GroupSetStartMinuteCommand {
   }
 
   async _replyWithSuccessMessage(ctx, chat, hour, minute) {
-    const message = `The roll call start time for ${chat.chatName} is set to ${formatTime(hour, minute)}.`;
+    const message = `The roll call end time for ${chat.chatName} is set to ${formatTime(hour, minute)}.`;
     await ctx.reply(message);
   }
 }
 
-module.exports = { GroupSetStartMinuteCommand };
+module.exports = { GroupSetEndMinuteCommand };

@@ -6,6 +6,7 @@ const { GroupSetStartHourCommand } = require('./group-set-start-hour-command');
 const { GroupSetStartMinuteCommand } = require('./group-set-start-minute-command');
 const { GroupSetEndTimeCommand } = require('./group-set-end-time-command');
 const { GroupSetEndHourCommand } = require('./group-set-end-hour-command');
+const { GroupSetEndMinuteCommand } = require('./group-set-end-minute-command');
 
 const {
   groupInfoCommandName,
@@ -33,7 +34,7 @@ class GroupChosenCommand {
       [setRollCallStartMinuteCommandName]: new GroupSetStartMinuteCommand(botInstance),
       [setRollCallEndTimeCommandName]: new GroupSetEndTimeCommand(botInstance),
       [setRollCallEndHourCommandName]: new GroupSetEndHourCommand(botInstance),
-      [setRollCallEndMinuteCommandName]: null,
+      [setRollCallEndMinuteCommandName]: new GroupSetEndMinuteCommand(botInstance),
       [startRollCallCommandName]: new GroupStartRollCallCommand(botInstance),
       [stopRollCallCommandName]: new GroupStopRollCallCommand(botInstance)
     };

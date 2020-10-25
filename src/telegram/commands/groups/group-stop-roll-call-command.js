@@ -33,7 +33,7 @@ class GroupStopRollCallCommand {
   async _setChatInactiveAndHandleReply(ctx, chat) {
     await ChatRepository.setChatActive(chat, false);
 
-    const message = `The roll call was disabled for ${chat.chatName}`;
+    const message = `The roll call was disabled for ${chat.chatName}.`;
     ctx.reply(message);
   }
 }

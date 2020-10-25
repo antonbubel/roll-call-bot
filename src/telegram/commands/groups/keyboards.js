@@ -33,7 +33,7 @@ const createSelectMinuteKeyboard = (chatId, command) => {
     keys.push(keyboardKey);
   }
 
-  await Keyboard.make(keys)
+  return Keyboard.make(keys)
     .oneTime()
     .inline();
 }
