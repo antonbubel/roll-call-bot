@@ -1,8 +1,6 @@
 const { Sequelize } = require('sequelize');
 
 class Connection {
-  static _sequelize;
-
   constructor() {
     const connectionString = this._getConnectionString();
     this._initializeSequelize(connectionString);
@@ -19,7 +17,7 @@ class Connection {
   }
 
   _getConnectionString() {
-    return process.env.ROLL_BOT_CONNECTION_STRING;
+    return process.env.ROLL_CALL_BOT_CONNECTION_STRING;
   }
 }
 

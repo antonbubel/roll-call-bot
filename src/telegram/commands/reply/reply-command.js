@@ -2,7 +2,6 @@ const { ChatRepository, ReplyRepository } = require('../../../database/repositor
 
 class ReplyCommand {
   constructor(botInstance) {
-    this._locks = new Map();
     this._botInstance = botInstance;
   }
 

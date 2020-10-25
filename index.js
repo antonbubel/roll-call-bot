@@ -1,10 +1,3 @@
-const { initializeDatabase } = require('./src/database');
-const Bot = require('./src/telegram/bot');
-const Schedule = require('./src/telegram/schedule');
+const { initializeRollCallBot } = require('./src/main');
 
-initializeDatabase()
-  .then(async () => {
-    await Bot.launch();
-    await Schedule.launch();
-  })
-  .catch(console.error);
+initializeRollCallBot();

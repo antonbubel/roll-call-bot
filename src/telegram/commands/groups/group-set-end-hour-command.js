@@ -29,6 +29,7 @@ class GroupSetEndHourCommand {
 
     await this._trySettingStartHour(ctx, chatId, hour);
   }
+
   async _trySettingStartHour(ctx, chatId, hour) {
     const chat = await ChatRepository.getChatById(chatId);
 

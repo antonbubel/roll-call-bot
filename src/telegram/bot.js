@@ -1,6 +1,5 @@
 const { Telegraf } = require('telegraf');
 const session = require('telegraf/session');
-const { stage } = require('./scenes');
 
 const { initializeCommandHandlers } = require('./commands');
 
@@ -32,14 +31,13 @@ class Bot {
       this._endRollCallCommand = new EndRollCallCommand(this._botInstance);
 
       this._botInstance.use(session());
-      this._botInstance.use(stage.middleware());
 
       initializeCommandHandlers(this._botInstance);
     }
   }
 
   _getBotToken() {
-    return process.env.ROLL_BOT_TOKEN;
+    return process.env.ROLL_CALL_BOT_TOKEN;
   }
 }
 
