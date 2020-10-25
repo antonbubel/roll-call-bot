@@ -1,21 +1,13 @@
-const { Keyboard, Key } = require('telegram-keyboard');
-
 const { ChatRepository, ChatMemberRepository } = require('../../../database/repositories');
 
 const trim = require('../../../utilities/trim');
 
-const { buildChatChosenAction, chatHasRollCallEndTime } = require('./utilities');
+const { createSelectMinuteKeyboard } = require('./keyboards');
+const { chatHasRollCallEndTime } = require('./utilities');
 const { getDisplayHour } = require('../../../utilities/time');
 
-const {
-  groupRollCallMinStartHour,
-  groupRollCallMaxStartHour,
-  rollCallMinMinute,
-  rollCallMaxMinute,
-  rollCallMinutesStep
-} = require('./constants');
-
 const { setRollCallStartMinuteCommandName } = require('../custom-commands');
+const { groupRollCallMinStartHour, groupRollCallMaxStartHour } = require('./constants');
 
 class GroupSetStartHourCommand {
   constructor(botInstance) {
@@ -66,14 +58,9 @@ class GroupSetStartHourCommand {
 
   async _replyWithMinutePicker(ctx, chatId) {
     const message = 'Select roll call start minute:'
-    const keys = [];
+    const keyboard = createSelectMinuteKeyboard(chatId, setRollCallStartMinuteCommandName);
 
-    for (let index = Math.floor(rollCallMinMinute / rollCallMinutesStep); index < Math.floor(rollCallMaxMinute / rollCallMinutesStep); index++) {
-      const displayMinute = index * rollCallMinutesStep;
-      keys.push(Key.callback(displayMinute || '00', buildChatChosenAction(chatId, setRollCallStartMinuteCommandName, displayMinute)));
-    }
-
-    await ctx.reply(message, Keyboard.make(keys).oneTime().inline());
+    await ctx.reply(message, keyboard);
   }
 
   _validateStartHourOverEndHour(chat, hour) {

@@ -2,13 +2,13 @@ const { ChatRepository, ChatMemberRepository } = require('../../../database/repo
 
 const trim = require('../../../utilities/trim');
 
-const { createSelectHourKeyboard } = require('./keyboards');
 const { getRollCallScheduleInfo } = require('./utilities');
+const { createSelectHourKeyboard } = require('./keyboards');
 
-const { setRollCallStartHourCommandName } = require('../custom-commands');
-const { groupRollCallMinStartHour, groupRollCallMaxStartHour } = require('./constants');
+const { setRollCallEndHourCommandName } = require('../custom-commands');
+const { groupRollCallMinEndHour, groupRollCallMaxEndHour } = require('./constants');
 
-class GroupSetStartTimeCommand {
+class GroupSetEndTimeCommand {
   constructor(botInstance) {
     this._botInstance = botInstance;
   }
@@ -36,15 +36,15 @@ class GroupSetStartTimeCommand {
   }
 
   async _replyWithHourPicker(ctx, chatId) {
-    const message = 'Select roll call start hour:'
+    const message = 'Select roll call end hour:'
     const keyboard = createSelectHourKeyboard(
       chatId,
-      setRollCallStartHourCommandName,
-      groupRollCallMinStartHour,
-      groupRollCallMaxStartHour);
+      setRollCallEndHourCommandName,
+      groupRollCallMinEndHour,
+      groupRollCallMaxEndHour);
 
     await ctx.reply(message, keyboard);
   }
 }
 
-module.exports = { GroupSetStartTimeCommand };
+module.exports = { GroupSetEndTimeCommand };
