@@ -5,7 +5,7 @@ const trim = require('../../../utilities/trim');
 const formatTime = require('../../../utilities/format-time');
 
 const buildChatChosenAction = (chatId, command, param) =>
-  `${groupChatActionPrefix}-${chatId}-${command}${param ? `-${param}` : ''}`;
+  `${groupChatActionPrefix}-${chatId}-${command}${!isNull(param) ? `-${param}` : ''}`;
 
 const chatSettingsAreValid = (chat, chatMembers) => chatHasRollCallStartTime(chat)
   && chatHasRollCallEndTime(chat)

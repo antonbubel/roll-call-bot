@@ -8,4 +8,7 @@ const getTwelveHourPeriod = (hour) => isPostMeridiemHour(hour)
 const formatHour = (hour) =>
   hour % 12 || 12;
 
-module.exports = { isPostMeridiemHour, getTwelveHourPeriod, formatHour };
+const getDisplayHour = (hour) =>
+  `${formatHour(hour)} ${getTwelveHourPeriod(hour)}`;
+
+module.exports = { isPostMeridiemHour, getTwelveHourPeriod, formatHour, getDisplayHour };

@@ -67,6 +67,38 @@ class ChatRepository {
     return chat;
   }
 
+  async setChatRollCallStartHour(chat, rollCallStartHour) {
+    chat.rollCallStartHour = rollCallStartHour;
+
+    await chat.save();
+
+    return chat;
+  }
+  
+  async setChatRollCallStartMinute(chat, rollCallStartMinute) {
+    chat.rollCallStartMinute = rollCallStartMinute;
+
+    await chat.save();
+
+    return chat;
+  }
+
+  async setChatRollCallEndHour(chat, rollCallEndHour) {
+    chat.rollCallEndHour = rollCallEndHour;
+
+    await chat.save();
+
+    return chat;
+  }
+
+  async setChatRollCallEndMinute(chat, rollCallEndMinute) {
+    chat.rollCallEndMinute = rollCallEndMinute;
+
+    await chat.save();
+
+    return chat;
+  }
+
   async setChatActive(chat, isActive) {
     chat.isActive = isActive;
 

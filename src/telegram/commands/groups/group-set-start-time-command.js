@@ -3,7 +3,7 @@ const { Keyboard, Key } = require('telegram-keyboard');
 const { ChatRepository, ChatMemberRepository } = require('../../../database/repositories');
 
 const trim = require('../../../utilities/trim');
-const { formatHour, getTwelveHourPeriod } = require('../../../utilities/time');
+const { getDisplayHour } = require('../../../utilities/time');
 
 const { buildChatChosenAction, getRollCallScheduleInfo } = require('./utilities');
 const { groupRollCallMinStartHour, groupRollCallMaxStartHour } = require('./constants');
@@ -42,7 +42,7 @@ class GroupSetStartTimeCommand {
     const keys = [];
 
     for (let hour = groupRollCallMinStartHour; hour <= groupRollCallMaxStartHour; hour++) {
-      const displayHour = `${formatHour(hour)} ${getTwelveHourPeriod(hour)}`;
+      const displayHour = getDisplayHour(hour);
       keys.push(Key.callback(displayHour, buildChatChosenAction(chatId, setRollCallStartHourCommandName, hour)));
     }
 
