@@ -7,7 +7,8 @@ RUN npm install
 RUN npm ci --only=production
 
 # Copy the rest of the files
-COPY . .
+COPY index.js ./
+COPY src/. ./src/.
 
 # run start script
 CMD [ "npm", "run", "start" ]
