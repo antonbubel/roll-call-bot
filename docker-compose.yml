@@ -1,0 +1,11 @@
+version: "3"
+services:
+  roll-call-bot:
+    image: antonbubel/roll-call-bot:${TAG}"
+    env_file:
+      - ./config/node.env
+      - ./config/bot.env
+    environment:
+      - ROLL_CALL_BOT_CONNECTION_STRING=${ROLL_CALL_BOT_DATABASE_MOUNT_FOLDER_TARGET}/${ROLL_CALL_BOT_DATABASE_FILE_NAME}
+    volumes:
+      - "${ROLL_CALL_BOT_DATABASE_MOUNT_FOLDER_SOURCE}:${ROLL_CALL_BOT_DATABASE_MOUNT_FOLDER_TARGET}"
