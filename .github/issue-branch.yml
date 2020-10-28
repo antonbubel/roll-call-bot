@@ -1,0 +1,14 @@
+mode: chatops
+silent: false
+gitSafeReplacementChar: '-'
+branchName: 'RCB-${issue.number}-${issue.title,}'
+
+branches:
+  - label: 'tech dept'
+    prefix: feature/
+  - label: 'feature'
+    prefix: feature/
+  - label: 'defect'
+    prefix: bugfix/
+
+autoCloseIssue: true
