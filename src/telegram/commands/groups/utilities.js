@@ -17,8 +17,11 @@ const chatHasRollCallStartTime = (chat) => !isNull(chat.rollCallStartHour)
 const chatHasRollCallEndTime = (chat) => !isNull(chat.rollCallEndHour)
   && !isNull(chat.rollCallEndMinute);
 
+const getUnknownUsersCount = (chat, chatMembers) =>
+  chat.chatMembersCount - chatMembers.length - 1;
+
 const allChatMembersAvailabe = (chat, chatMembers) =>
-  chat.chatMembersCount - 1 === chatMembers.length;
+  getUnknownUsersCount(chat, chatMembers) === 0;
 
 const getRollCallStartTime = (chat) =>
   formatTime(chat.rollCallStartHour, chat.rollCallStartMinute); 
@@ -49,7 +52,12 @@ const getChatInactivityReason = (chat, chatMembers) => {
   }
 
   if (!allChatMembersAvailabe(chat, chatMembers)) {
-    errors.push('Bot is still learning about the group chat members.');
+    const unknownUsersCount = getUnknownUsersCount(chat, chatMembers);
+    const errorMessage = unknownUsersCount > 1
+      ? `Bot is still learning about the group chat members: there're ${unknownUsersCount} users bot doesn't know about.`
+      : `Bot is still learning about the group chat members: there's ${unknownUsersCount} user bot doesn't know about.`
+
+    errors.push(errorMessage);
   }
 
   if (errors.length === 0) {
@@ -72,6 +80,7 @@ module.exports = {
   chatHasRollCallStartTime,
   chatHasRollCallEndTime,
   allChatMembersAvailabe,
+  getUnknownUsersCount,
   getRollCallStartTime,
   getRollCallEndTime,
   getRollCallScheduleInfo,
