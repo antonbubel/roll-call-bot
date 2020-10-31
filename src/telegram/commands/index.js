@@ -1,17 +1,37 @@
 const commands = require('./commands');
 
-const wrapHandler = (handlerInstance) => {
-  return (...params) => {
+const wrapHandler = (commandMethod, handlerInstance) => {
+  return async (...params) => {
+    let isError = false;
+    const [ctx] = params;
+
     try {
-      handlerInstance.handle.bind(handlerInstance)(...params);
+      await handlerInstance.handle.bind(handlerInstance)(...params);
+    } catch (error) {
+      isError = true;
+      console.error(error);
+    }
+
+    await answerCallbackQuery(commandMethod, isError, ctx);
+  }
+};
+
+const answerCallbackQuery = async (commandMehtod, isError, ctx) => {
+  if (commandMehtod === 'action') {
+    try {
+      if (isError) {
+        await ctx.answerCbQuery('Sorry, the error has occurred while trying to process your request.')
+      } else {
+        await ctx.answerCbQuery();
+      }
     } catch (error) {
       console.error(error);
     }
   }
-};
+}
 
 const bindHandler = (botInstance, command, handlerInstance) => {
-  const handleMethod = wrapHandler(handlerInstance);
+  const handleMethod = wrapHandler(command.method, handlerInstance);
 
   if (command.updateType) {
     botInstance[command.method](command.updateType, handleMethod);
