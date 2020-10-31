@@ -4,9 +4,11 @@ const Bot = require('../bot');
 
 const { ChatRepository } = require('../../database/repositories');
 
+const dayOfWeek = require('../../utilities/day-of-week');
+
 const createEndRollCallJob = () => {
   return schedule
-    .scheduleJob(`*/1 * * * 1-5`, async () => {
+    .scheduleJob(`*/1 * * * ${dayOfWeek.monday}-${dayOfWeek.friday}`, async () => {
       const currentTime = new Date();
       const currentHour = currentTime.getHours();
       const currentMinute = currentTime.getMinutes();

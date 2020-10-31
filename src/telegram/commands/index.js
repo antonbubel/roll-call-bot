@@ -1,10 +1,22 @@
 const commands = require('./commands');
 
+const wrapHandler = (handlerInstance) => {
+  return (...params) => {
+    try {
+      handlerInstance.handle.bind(handlerInstance)(...params);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};
+
 const bindHandler = (botInstance, command, handlerInstance) => {
+  const handleMethod = wrapHandler(handlerInstance);
+
   if (command.updateType) {
-    botInstance[command.method](command.updateType, handlerInstance.handle.bind(handlerInstance));
+    botInstance[command.method](command.updateType, handleMethod);
   } else {
-    botInstance[command.method](handlerInstance.handle.bind(handlerInstance));
+    botInstance[command.method](handleMethod);
   }
 };
 
