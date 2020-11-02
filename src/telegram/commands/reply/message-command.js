@@ -3,10 +3,14 @@ const { Mutex } = require('async-mutex');
 const { UserRepository, ChatRepository, ChatMemberRepository } = require('../../../database/repositories');
 const { mapUser, mapUsers, mapChat } = require('../../mappings');
 
+const { ReplyCommand } = require('./reply-command');
+const { replyCommandHandlerMode } = require('./constants');
+
 class MessageCommand {
   constructor(botInstance) {
     this._locks = new Map();
     this._botInstance = botInstance;
+    this._replyCommand = new ReplyCommand(botInstance, replyCommandHandlerMode.silent);
   }
 
   async handle(ctx) {
@@ -23,6 +27,7 @@ class MessageCommand {
         .then(async (release) => {
           try {
             await this._handleGroupChatMessage(ctx, userId, chatId);
+            await this._replyCommand.handle(ctx);
           } catch (error) {
           } finally {
             release();

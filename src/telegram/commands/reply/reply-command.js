@@ -2,9 +2,12 @@ const { ChatRepository, ReplyRepository } = require('../../../database/repositor
 
 const dayOfWeek = require('../../../utilities/day-of-week');
 
+const { replyCommandHandlerMode } = require('./constants');
+
 class ReplyCommand {
-  constructor(botInstance) {
+  constructor(botInstance, mode) {
     this._botInstance = botInstance;
+    this._mode = mode || replyCommandHandlerMode.callback;
   }
 
   async handle(ctx) {
@@ -16,20 +19,20 @@ class ReplyCommand {
       const isReplyValid = await this._checkIfReplyIsValidAndHandleErrors(ctx, chat);
 
       if (chat && isReplyValid) {
-        await this._handleUserReply(ctx, userId, chat);
+        await this._trySavingUserReply(ctx, userId, chat);
       }
     }
   }
 
-  async _handleUserReply(ctx, userId, chat) {
+  async _trySavingUserReply(ctx, userId, chat) {
     const reply = this._createReply(userId, chat.chatId);
     const userReply = await ReplyRepository.getUserReplyByDate(reply);
 
     if (!userReply) {
       await ReplyRepository.createReply(reply);
-      await ctx.answerCbQuery('Thanks for the reply, have a nice day!', false);
+      await this._answerCallbackQuery(ctx, 'Thanks for the reply, have a nice day!');
     } else {
-      await ctx.answerCbQuery(`You've already replied today.`, false);
+      await this._answerCallbackQuery(ctx, `You've already replied today.`);
     }
   }
 
@@ -39,21 +42,27 @@ class ReplyCommand {
     const isEndTimeValid = this._isEndTimeValid(chat);
 
     if (isWeekend) {
-      await ctx.answerCbQuery('Sorry, the roll call is off for a weekend.', false);
+      await this._answerCallbackQuery(ctx, 'Sorry, the roll call is off for a weekend.');
       return false;
     }
 
     if (!isStartTimeValid) {
-      await ctx.answerCbQuery('Sorry, the roll call has not started yet.', false);
+      await this._answerCallbackQuery(ctx, 'Sorry, the roll call has not started yet.');
       return false;
     }
 
     if (!isEndTimeValid) {
-      await ctx.answerCbQuery('Sorry, the roll call is already over.', false);
+      await this._answerCallbackQuery(ctx, 'Sorry, the roll call is already over.');
       return false;
     }
 
     return true;
+  }
+
+  async _answerCallbackQuery(ctx, message) {
+    if (this._mode === replyCommandHandlerMode.callback) {
+      await ctx.answerCbQuery(message, false);
+    }
   }
 
   _isWeekend() {

@@ -1,5 +1,5 @@
 const { HelpCommand } = require('./help/help-command');
-const { MessageCommand } = require('./message/message-command');
+const { MessageCommand } = require('./reply/message-command');
 const { ReplyCommand } = require('./reply/reply-command');
 const { GroupsCommand } = require('./groups/groups-command');
 const { GroupChosenCommand } = require('./groups/group-chosen-command');
