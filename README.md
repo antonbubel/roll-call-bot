@@ -46,6 +46,13 @@ $ docker-compose up
 ```
 
 ## Versions:
+### 1.1
+Fixed defects:
+* [RCB-3 The bot doesn't answer callback query when reply action is performed](https://github.com/antonbubel/roll-call-bot/issues/3)
+
+New features:
+* [RCB-1 Save user reply when they post a message](https://github.com/antonbubel/roll-call-bot/issues/1)
+* [RCB-2 Update "Bot is still learning about the group chat members" error message](https://github.com/antonbubel/roll-call-bot/issues/2)
 ### 1.0
 Known issues and limitations:
 * [RCB-3 The bot doesn't answer callback query when reply action is performed](https://github.com/antonbubel/roll-call-bot/issues/3)
